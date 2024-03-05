@@ -84,13 +84,10 @@
     // Проверка отправки формы
     if(isset($_POST['submit'])) {
         // Извлечение введённых данных формы
-        $name = $_POST['name'];
-        $age = $_POST['age'];
-        $gender = $_POST['gender'];
         echo "<h2>Submitted Data:</h2>";
-        echo "<p>Name: $name</p>";
-        echo "<p>Age: $age</p>";
-        echo "<p>Gender: $gender</p>";
+        echo "<p>Name:".$_POST['name']."</p>";
+        echo "<p>Age:". $_POST['age']."</p>";
+        echo "<p>Gender: ".$_POST['gender']. "</p>";
     }
     ?>
 </body>

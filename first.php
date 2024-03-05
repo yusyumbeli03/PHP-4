@@ -75,7 +75,7 @@ function validateFormData($formData) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $validationErrors = validateFormData($_POST);
+        $validationErrors = validateFormData($_POST);
 
     if (empty($validationErrors)) {
         echo '<div id="result">

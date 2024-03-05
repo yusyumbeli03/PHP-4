@@ -51,12 +51,12 @@
 <div class="question">
     <label>Сколько струн имеет укулеле?</label><br>
     <label><input type="radio" id="four" name="q2" value="4" required> 4</label><br>
-    <label><input type="radio" id="six" name="q2" value="6"> 6, как и гитара. Что за глупый вопрос?</label>
+    <label><input type="radio" id="six" name="q2" value="6, как и гитара. Что за глупый вопрос?"> 6, как и гитара. Что за глупый вопрос?</label>
 </div>
 
         <div class="question">
     <label>Чьи песни играют чаще всего? (можно выбрать несколько вариантов)</label><br>
-    <label><input type="checkbox" name="q3[]" value="Кино(В.Цой)"> Кино(В.Цой) </label><br>
+    <label><input type="checkbox" name="q3[]" value="Кино(В.Цой)" > Кино(В.Цой) </label><br>
     <label><input type="checkbox" name="q3[]" value="Пётр Петров"> Пётр Петров</label><br>
     <label><input type="checkbox" name="q3[]" value="Макс Корж"> Макс Корж </label>
 </div>
@@ -64,24 +64,33 @@
         <button type="submit">Отправить</button>
     </form>
 
+
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $name = $_POST["name"];
-        $q1 = $_POST["q1"] ?? '';
-        $q2 = $_POST["q2"] ?? '';
-        $q3 = $_POST["q3"] ?? [];
+    $questions = [
+        "1. На каком инструменте я играю?",
+        "2. Сколько струн имеет укулеле?",
+        "3. Чьи песни играют чаще всего?"
+    ];
 
-        echo "<div class='result'>";
-        echo "<h3>Результаты для $name:</h3>";
-        echo "<p>1. На каком инструменте я играю? - $q1</p>";
-        echo "<p>2. Сколько струн имеет укулеле? - $q2</p>";
-        if (!empty($q3)) {
-            echo "<p>3. Чьи песни играют чаще всего? - " . implode(", ", $q3) . "</p>";
-        }
-        echo "</div>";
+    $answers = [
+        $_POST["q1"] ?? '',
+        $_POST["q2"] ?? '',
+        $_POST["q3"] ?? ["Не выбрано"]
+    ];
+    $name = $_POST["name"];?>
+    <div class='result'>
+    <h3>Результаты для $name:</h3>
+    <?php
+    // Вывод вопросов и ответов
+    for ($i = 0; $i < count($questions); $i++) {
+        echo "<p>" . $questions[$i] . " - " . (is_array($answers[$i]) ? implode(", ", $answers[$i]) : $answers[$i]) . "</p>";
     }
     ?>
+    </div>
+    <?php
+}
+?>
 </div>
-
 </body>
 </html>
