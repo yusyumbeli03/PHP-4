@@ -1,135 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тест</title>
     <style>
         body {
-            background: radial-gradient(circle, rgba(226,228,208,1) 0%, rgba(128,90,62,1) 100%);
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            background: radial-gradient(circle, rgba(226,228,208,1) 0%, rgba(128,90,62,1) 100%);
         }
-
-        h1 {
-            text-align: center;
-        }
-
-        form {
+        .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
-            border-radius: 8px;
+            border-radius: 5px;
             background-color: #f9f9f9;
         }
-
-        label {
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
             display: block;
             margin-bottom: 10px;
+            font-weight: bold;
         }
-
-        input[type="text"],
-        input[type="radio"],
-        input[type="checkbox"] {
-            margin-bottom: 10px;
-        }
-
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        p {
-            margin-bottom: 10px;
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid #ccc;
-            margin: 10px 0;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
+
+<div class="container">
+    <h2>Пройдите тест</h2>
+    <form method="post">
+        <div class="question">
+            <label for="name">Введите ваше имя:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="question">
+    <label>На каком инструменте я играю?</label><br>
+    <label><input type="radio" id="ukulele" name="q1" value="Укулеле" required> Укулеле</label><br>
+    <label><input type="radio" id="guitar" name="q1" value="Гитара"> Гитара</label>
+</div>
+<div class="question">
+    <label>Сколько струн имеет укулеле?</label><br>
+    <label><input type="radio" id="four" name="q2" value="4" required> 4</label><br>
+    <label><input type="radio" id="six" name="q2" value="6"> 6, как и гитара. Что за глупый вопрос?</label>
+</div>
+
+        <div class="question">
+    <label>Чьи песни играют чаще всего? (можно выбрать несколько вариантов)</label><br>
+    <label><input type="checkbox" name="q3[]" value="Кино(В.Цой)"> Кино(В.Цой) </label><br>
+    <label><input type="checkbox" name="q3[]" value="Пётр Петров"> Пётр Петров</label><br>
+    <label><input type="checkbox" name="q3[]" value="Макс Корж"> Макс Корж </label>
+</div>
+
+        <button type="submit">Отправить</button>
+    </form>
+
     <?php
-    // Проверка, была ли отправлена форма
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Проверка на заполнение имени пользователя
-        if (empty($_POST["username"])) {
-            echo "Пожалуйста, введите ваше имя.";
-        } else {
-            $username = $_POST["username"];
+        $name = $_POST["name"];
+        $q1 = $_POST["q1"] ?? '';
+        $q2 = $_POST["q2"] ?? '';
+        $q3 = $_POST["q3"] ?? [];
 
-            // Вопросы и правильные ответы
-            $questions = array(
-                "Вопрос 1: На каком инструменте я играю?",
-                "Вопрос 2: Сколько струн имеет укулеле?",
-                "Вопрос 3: Чьи песни играют чаще всего?"
-            );
-            $correct_answers = array("a", "b", array("a", "c"));
-
-            // Получение ответов пользователя
-            $user_answers = array(
-                $_POST["question1"],
-                $_POST["question2"],
-                isset($_POST["question3"]) ? $_POST["question3"] : array()
-            );
-
-            // Вывод результатов
-            echo "<h2>Результаты теста</h2>";
-            echo "<p>Имя пользователя: $username</p>";
-
-            for ($i = 0; $i < count($questions); $i++) {
-                echo "<p>$questions[$i]</p>";
-                echo "<p>Ваш ответ: " . ($user_answers[$i] ? implode(", ", $user_answers[$i]) : "Не выбран") . "</p>";
-                echo "<p>Правильный ответ: " . ($i == 2 ? "Кино(В.Цой), Макс Корж" : ($correct_answers[$i] == "a" ? "Укулеле" : "4")) . "</p>";
-                echo "<hr>";
-            }
+        echo "<div class='result'>";
+        echo "<h3>Результаты для $name:</h3>";
+        echo "<p>1. На каком инструменте я играю? - $q1</p>";
+        echo "<p>2. Сколько струн имеет укулеле? - $q2</p>";
+        if (!empty($q3)) {
+            echo "<p>3. Чьи песни играют чаще всего? - " . implode(", ", $q3) . "</p>";
         }
+        echo "</div>";
     }
     ?>
+</div>
 
-    <h1>Пройдите тест</h1>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="username">Введите ваше имя:</label>
-        <input type="text" name="username" id="username">
-        <br><br>
-
-        <p>Вопросы:</p>
-
-        <p>1. На каком инструменте я играю?</p>
-        <input type="radio" name="question1" value="a" > Укулеле
-        <br>
-        <input type="radio" name="question1" value="b"> Гитара
-        <br><br>
-
-        <p>2. Сколько струн имеет укулеле</p>
-        <input type="radio" name="question2" value="a" > 4
-        <br>
-        <input type="radio" name="question2" value="b"> 6 , как и гитара. Что за глупый вопрос?
-        <br><br>
-
-        <p>3. Чьи песни играют чаще всего? (можно выбрать несколько вариантов)</p>
-        <input type="checkbox" name="question3[]" value="a" > Кино(В.Цой)
-        <br>
-        <input type="checkbox" name="question3[]" value="b"> Пётр Петров
-        <br>
-        <input type="checkbox" name="question3[]" value="c"> Макс Корж
-        <br><br>
-
-        <input type="submit" value="Отправить">
-    </form>
 </body>
 </html>
